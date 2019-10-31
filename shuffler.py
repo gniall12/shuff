@@ -1,6 +1,7 @@
 import requests
 import json
 import config
+from flask import abort
 
 base_url = config.base_url
 
@@ -24,7 +25,10 @@ def get_playlist_tracks(playlist_id, headers):
 
 def get_old_artists_ids(tracks):
     print('Getting old artist ids...')
-    return [track['artists'][0]['id']for track in tracks]
+    artist_ids = [track['artists'][0]['id'] for track in tracks]
+    # Some artists have no ID - remove Nones from list
+    artist_ids_nones_removed = list(filter(None, artist_ids)) 
+    return artist_ids_nones_removed
 
 def get_new_track_ids(old_artist_ids, old_tracks, headers):
     print('Getting new track ids...')
