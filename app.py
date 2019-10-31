@@ -33,7 +33,6 @@ def login_redirect():
 
 @app.route('/callback')
 def handle_token():
-    session.clear()
     code = request.args.get('code')
     r = requests.post(
         token_base_url,
