@@ -5,7 +5,7 @@ import urllib
 import random
 import string
 
-from config import auth_base_url, token_base_url, client_id, client_secret, redirect_uri, scope, response_type, secret_key
+from config import auth_base_url, token_base_url, client_id, client_secret, redirect_uri, scope, response_type, secret_key, frontend_url
 from shuffler import shuffle
 
 app = Flask(__name__)
@@ -25,7 +25,8 @@ def login_redirect():
         'redirect_uri': redirect_uri,
         'scope': scope,
         'response_type': response_type,
-        'state': random_string
+        'state': random_string,
+        'show_dialog': True
     }
     url = auth_base_url + '?' + urllib.parse.urlencode(params)
     return redirect(url)
@@ -45,7 +46,7 @@ def handle_token():
         }
     )
     users[request.args.get('state')]['access_token'] = r.json()['access_token']
-    return redirect('http://localhost:4200/loggedin')
+    return redirect(frontend_url)
 
 
 @app.route('/userinfo')
@@ -78,6 +79,11 @@ def generate_random_string(stringLength=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    [session.pop(key) for key in list(session.keys())]
+    return {'status': 'Logged out'}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
