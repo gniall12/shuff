@@ -12,9 +12,10 @@ def shuffle(playlist, user_id, access_token):
     old_tracks = get_playlist_tracks(playlist_id, headers)
     old_artist_ids = get_old_artists_ids(old_tracks)
     new_track_ids = get_new_track_ids(old_artist_ids, old_tracks, headers)
-    new_playlist_id = create_new_playlist(playlist_name, user_id, new_track_ids, headers)
+    new_playlist = create_new_playlist(playlist_name, user_id, new_track_ids, headers)
+    new_playlist_id = new_playlist['id']
     add_tracks_to_playlist(new_playlist_id, new_track_ids, headers)
-    return new_track_ids
+    return new_playlist
 
 def get_playlist_tracks(playlist_id, headers):
     print('Getting playlist tracks...')
@@ -61,8 +62,7 @@ def create_new_playlist(playlist_name, user_id, track_ids, headers):
     url = f'{base_url}users/{user_id}/playlists'
     body = json.dumps({'name': f'{playlist_name} - Shuffed'})
     r = requests.post(url, data=body, headers=headers)
-    playlist_id = r.json()['id']
-    return playlist_id
+    return r.json()
 
 def add_tracks_to_playlist(playlist_id, tracks, headers):
     url = f'{base_url}playlists/{playlist_id}/tracks'
