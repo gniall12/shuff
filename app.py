@@ -73,8 +73,8 @@ def shuffle_playlist():
     playlist = request.json['playlist']
     access_token = users[session['id']]['access_token']
     user_id = session['user_id']
-    tracks = shuffle(playlist, user_id, access_token)
-    return {'tracks': tracks}
+    new_playlist = shuffle(playlist, user_id, access_token)
+    return new_playlist
 
 
 @app.route('/logout', methods=['GET'])
