@@ -14,6 +14,7 @@ app.config['SECRET_KEY'] = secret_key
 
 users = {}
 
+
 @app.route('/')
 def login_redirect():
     random_string = generate_random_string()
@@ -61,7 +62,8 @@ def get_user_info():
 @app.route('/playlists')
 def get_user_playlists():
     access_token = users[session['id']]['access_token']
-    r = requests.get('https://api.spotify.com/v1/me/playlists',
+    params = {'limit': 50}
+    r = requests.get('https://api.spotify.com/v1/me/playlists', params=params,
                      headers={'Authorization': 'Bearer ' + access_token})
     return r.text
 
@@ -75,15 +77,17 @@ def shuffle_playlist():
     return {'tracks': tracks}
 
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    [session.pop(key) for key in list(session.keys())]
+    return {'status': 'Logged out'}
+
+
 def generate_random_string(stringLength=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
-@app.route('/logout', methods=['GET'])
-def logout():
-    [session.pop(key) for key in list(session.keys())]
-    return {'status': 'Logged out'}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
