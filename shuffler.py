@@ -1,6 +1,6 @@
 from collections import Counter
+import random
 from spotify import get_playlist_tracks, get_artist_top_tracks, create_new_playlist, add_tracks_to_playlist
-
 
 def shuffle(playlist, user_id, access_token):
     playlist_id = playlist['id']
@@ -30,13 +30,15 @@ def get_new_track_ids(old_artist_ids, old_tracks, headers):
     artist_count_dict = Counter(old_artist_ids)
     for artist_id in artist_count_dict:
         artist_top_tracks = get_artist_top_tracks(artist_id, headers)
-        tracks_added = 0
-        i = 0
-        while tracks_added < artist_count_dict[artist_id] and i < len(artist_top_tracks):
-            if not track_exists(artist_top_tracks[i], old_tracks + new_tracks):
-                new_tracks.append(artist_top_tracks[i])
-                tracks_added += 1
-            i += 1
+        random.shuffle(artist_top_tracks)
+        num_tracks_to_add = artist_count_dict[artist_id]
+        num_tracks_added = 0
+        for track in artist_top_tracks:
+            if not track_exists(track, old_tracks + new_tracks):
+                new_tracks.append(track)
+                num_tracks_added += 1
+            if num_tracks_added == num_tracks_to_add:
+                break
     return [track['uri'] for track in new_tracks]
 
 
