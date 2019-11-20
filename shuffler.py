@@ -27,14 +27,15 @@ def get_old_artists_ids(tracks):
 def get_new_track_ids(old_artist_ids, old_tracks, headers):
     print('Getting new track ids...')
     new_tracks = []
-    for artist_id in old_artist_ids:
-        track_added = False
-        i = 0
+    artist_count_dict = Counter(old_artist_ids)
+    for artist_id in artist_count_dict:
         artist_top_tracks = get_artist_top_tracks(artist_id, headers)
-        while not track_added and i < len(artist_top_tracks):
+        tracks_added = 0
+        i = 0
+        while tracks_added < artist_count_dict[artist_id] and i < len(artist_top_tracks):
             if not track_exists(artist_top_tracks[i], old_tracks + new_tracks):
                 new_tracks.append(artist_top_tracks[i])
-                track_added = True
+                tracks_added += 1
             i += 1
     return [track['uri'] for track in new_tracks]
 
