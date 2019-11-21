@@ -5,7 +5,11 @@ import urllib
 import random
 import string
 
-from config import auth_base_url, token_base_url, client_id, client_secret, redirect_uri, scope, response_type, secret_key, frontend_url
+from config import (
+    auth_base_url, token_base_url, client_id, client_secret, redirect_uri,
+    scope, response_type, secret_key, frontend_url, client_id_b64, base_url
+)
+
 from shuffler import shuffle
 
 app = Flask(__name__)
@@ -41,7 +45,7 @@ def handle_token():
         data={'grant_type': 'authorization_code',
               'code': code, 'redirect_uri': redirect_uri},
         headers={
-            'Authorization': 'Basic YWViYTY3ZDhkZTkwNDI4OThhMDhlN2M4NmM1NmEwYzY6NGJhNmMyYjY1NDQwNDZjNTk0MGJkNWQ4MDJiZjFiMzc=',
+            'Authorization': 'Basic ' + client_id_b64,
             'Content-Type': 'application/x-www-form-urlencoded',
             'Access-Control-Allow-Origin': '*'
         }
@@ -53,7 +57,7 @@ def handle_token():
 @app.route('/userinfo')
 def get_user_info():
     access_token = users[session['id']]['access_token']
-    r = requests.get('https://api.spotify.com/v1/me',
+    r = requests.get(base_url + 'me',
                      headers={'Authorization': 'Bearer ' + access_token})
     session['user_id'] = r.json()['id']
     return r.text
@@ -63,7 +67,7 @@ def get_user_info():
 def get_user_playlists():
     access_token = users[session['id']]['access_token']
     params = {'limit': 50}
-    r = requests.get('https://api.spotify.com/v1/me/playlists', params=params,
+    r = requests.get(base_url + 'me/playlists', params=params,
                      headers={'Authorization': 'Bearer ' + access_token})
     return r.text
 

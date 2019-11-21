@@ -5,6 +5,7 @@ load_dotenv()
 auth_base_url = 'https://accounts.spotify.com/authorize'
 token_base_url = 'https://accounts.spotify.com/api/token'
 client_id = os.getenv('SPOTIFY_CLIENT_ID')
+client_id_b64 = os.getenv('SPOTIFY_CLIENT_ID_B64')
 client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
 redirect_uri = os.getenv('SPOTIFY_REDIRECT_URI')
 scope = 'playlist-modify-private playlist-modify-public playlist-read-private playlist-read-collaborative'
