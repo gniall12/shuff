@@ -5,8 +5,10 @@ import urllib
 import random
 import string
 
-from config import auth_base_url, token_base_url, client_id, client_secret, redirect_uri, 
-scope, response_type, secret_key, frontend_url, client_id_b64
+from config import (
+    auth_base_url, token_base_url, client_id, client_secret, redirect_uri,
+    scope, response_type, secret_key, frontend_url, client_id_b64
+)
 
 from shuffler import shuffle
 
