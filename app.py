@@ -5,7 +5,9 @@ import urllib
 import random
 import string
 
-from config import auth_base_url, token_base_url, client_id, client_secret, redirect_uri, scope, response_type, secret_key, frontend_url
+from config import auth_base_url, token_base_url, client_id, client_secret, redirect_uri, 
+scope, response_type, secret_key, frontend_url, client_id_b64
+
 from shuffler import shuffle
 
 app = Flask(__name__)
@@ -41,7 +43,7 @@ def handle_token():
         data={'grant_type': 'authorization_code',
               'code': code, 'redirect_uri': redirect_uri},
         headers={
-            'Authorization': 'Basic YWViYTY3ZDhkZTkwNDI4OThhMDhlN2M4NmM1NmEwYzY6NGJhNmMyYjY1NDQwNDZjNTk0MGJkNWQ4MDJiZjFiMzc=',
+            'Authorization': 'Basic ' + client_id_b64,
             'Content-Type': 'application/x-www-form-urlencoded',
             'Access-Control-Allow-Origin': '*'
         }
