@@ -57,7 +57,7 @@ def handle_token():
 @app.route('/userinfo')
 def get_user_info():
     access_token = users[session['id']]['access_token']
-    r = requests.get('https://api.spotify.com/v1/me',
+    r = requests.get(base_url + 'me',
                      headers={'Authorization': 'Bearer ' + access_token})
     session['user_id'] = r.json()['id']
     return r.text
@@ -67,7 +67,7 @@ def get_user_info():
 def get_user_playlists():
     access_token = users[session['id']]['access_token']
     params = {'limit': 50}
-    r = requests.get('https://api.spotify.com/v1/me/playlists', params=params,
+    r = requests.get(base_url + 'me/playlists', params=params,
                      headers={'Authorization': 'Bearer ' + access_token})
     return r.text
 

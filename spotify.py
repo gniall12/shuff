@@ -1,9 +1,7 @@
 import requests
 import json
-import config
+from config import base_url
 from flask import abort
-
-base_url = config.base_url
 
 
 def get_playlist_tracks(playlist_id, headers):
