@@ -1,18 +1,22 @@
 from collections import Counter
 import random
-from spotify import get_playlist_tracks, get_artist_top_tracks, create_new_playlist, add_tracks_to_playlist
+from spotify_oauth import (
+    get_user_id, get_playlist_tracks, get_artist_top_tracks,
+    create_new_playlist, add_tracks_to_playlist
+)
 
-def shuffle(playlist, user_id, access_token):
+
+def shuffle(playlist):
     playlist_id = playlist['id']
     playlist_name = playlist['name']
-    headers = {'Authorization': 'Bearer ' + access_token}
-    old_tracks = get_playlist_tracks(playlist_id, headers)
+    user_id = get_user_id()
+    old_tracks = get_playlist_tracks(playlist_id)
     old_artist_ids = get_old_artists_ids(old_tracks)
-    new_track_ids = get_new_track_ids(old_artist_ids, old_tracks, headers)
+    new_track_ids = get_new_track_ids(old_artist_ids, old_tracks)
     new_playlist = create_new_playlist(
-        playlist_name, user_id, new_track_ids, headers)
+        playlist_name, user_id, new_track_ids)
     new_playlist_id = new_playlist['id']
-    add_tracks_to_playlist(new_playlist_id, new_track_ids, headers)
+    add_tracks_to_playlist(new_playlist_id, new_track_ids)
     return new_playlist
 
 
@@ -24,12 +28,12 @@ def get_old_artists_ids(tracks):
     return artist_ids_nones_removed
 
 
-def get_new_track_ids(old_artist_ids, old_tracks, headers):
+def get_new_track_ids(old_artist_ids, old_tracks):
     print('Getting new track ids...')
     new_tracks = []
     artist_count_dict = Counter(old_artist_ids)
     for artist_id in artist_count_dict:
-        artist_top_tracks = get_artist_top_tracks(artist_id, headers)
+        artist_top_tracks = get_artist_top_tracks(artist_id)
         random.shuffle(artist_top_tracks)
         num_tracks_to_add = artist_count_dict[artist_id]
         num_tracks_added = 0
