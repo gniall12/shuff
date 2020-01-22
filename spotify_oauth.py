@@ -12,7 +12,7 @@ spotify = oauth.remote_app(
     'spotify',
     consumer_key=client_id,
     consumer_secret=client_secret,
-    request_token_params={'scope': scope},
+    request_token_params={'scope': scope, 'show_dialog': True},
     base_url=base_url,
     request_token_url=None,
     access_token_method='POST',

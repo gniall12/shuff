@@ -18,11 +18,8 @@ def login_redirect():
 def handle_token():
     resp = spotify.authorized_response()
     if resp is None or resp.get('access_token') is None:
-        return 'Access denied: reason=%s error=%s resp=%s' % (
-            request.args['error'],
-            request.args['error_description'],
-            resp
-        )
+        session.pop('access_token', None)
+        return redirect(frontend_url)
     session['access_token'] = (resp['access_token'], '')
     return redirect(frontend_url)
 
