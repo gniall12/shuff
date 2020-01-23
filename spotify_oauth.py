@@ -1,6 +1,6 @@
 import json
 from flask import session, abort, Response
-from flask_oauthlib.client import OAuth
+from flask_oauthlib.client import OAuth, OAuthResponse
 from config import (
     auth_base_url, token_base_url, client_id,
     client_secret, scope, base_url
@@ -29,6 +29,8 @@ def get_user_id():
 def get_user_playlists():
     params = {'limit': 50}
     playlists = spotify.get('me/playlists', data=params)
+    if(playlists.status == 401):
+        abort(Response('Access token expired', 401))
     return playlists.data
 
 
