@@ -1,5 +1,5 @@
 import json
-from flask import session
+from flask import session, abort, Response
 from flask_oauthlib.client import OAuth
 from config import (
     auth_base_url, token_base_url, client_id,
@@ -81,4 +81,7 @@ def add_tracks_to_playlist(playlist_id, tracks):
 
 @spotify.tokengetter
 def get_spotify_oauth_token():
-    return session['access_token']
+    try:
+        return session['access_token']
+    except KeyError:
+        abort(Response('No access token', 400))
