@@ -62,12 +62,21 @@ def get_playlist_tracks(playlist_id):
     return [track['track'] for track in tracks]
 
 
-def get_artist_top_tracks(artist_id):
+def get_artist_top_tracks(artist_id, attempt_count=0):
     tracks = spotify.get(
         f'artists/{artist_id}/top-tracks?country=IE')
     if 'error' in tracks.data:
         log.error(tracks.data)
-    return tracks.data['tracks']
+        if(tracks.status == 429) and attempt_count < 3:
+            attempt_count += 1
+            log.info(f'Rate limit exceeded - attempt number {attempt_count}')
+            time.sleep(5)
+            return get_artist_top_tracks(artist_id, attempt_count)
+    try:
+        return tracks.data['tracks']
+    except KeyError:
+        log.error('Could not retrieve top tracks for artist id: {artist_id}')
+        return []
 
 
 def create_new_playlist(playlist_name, user_id, track_ids):
