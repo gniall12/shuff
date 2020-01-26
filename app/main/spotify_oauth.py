@@ -42,25 +42,20 @@ def get_user_playlists():
 
 
 def get_playlist_tracks(playlist_id):
-    log.info('Getting playlist tracks')
-    offset = 0
-    num_tracks_remaining = None
-    tracks = []
+    log.info(f'Getting playlist tracks for playlist {playlist_id}')
+    url = f'playlists/{playlist_id}/tracks'
+    playlist_tracks = []
     # Can only get 100 tracks per request - multiple requests may be needed
-    while True:
-        params = {'offset': offset}
-        curr_tracks = spotify.get(
-            f'playlists/{playlist_id}/tracks', data=params)
-        if 'error' in curr_tracks.data:
-            log.error(curr_tracks.data)
-        if not num_tracks_remaining:
-            num_tracks_remaining = curr_tracks.data['total']
-        tracks.extend(curr_tracks.data['items'])
-        num_tracks_remaining -= 100
-        if num_tracks_remaining <= 0:
-            break
-        offset += 100
-    return [track['track'] for track in tracks]
+    while url:
+        tracks = spotify.get(url)
+        if 'error' in tracks.data:
+            log.error(tracks.data)
+        playlist_tracks.extend(tracks.data['items'])
+        url = None
+        if 'next' in tracks.data and tracks.data['next']:
+            url = tracks.data['next'].split(base_url)[1]
+    log.info(f'{len(playlist_tracks)} found')
+    return [track['track'] for track in playlist_tracks]
 
 
 def get_artist_top_tracks(artist_id, attempt_count=0):
