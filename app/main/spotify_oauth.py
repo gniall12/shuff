@@ -1,12 +1,14 @@
 import json
 from flask import session, abort, Response
 from flask_oauthlib.client import OAuth, OAuthResponse
+import logging
 from config import (
     auth_base_url, token_base_url, client_id,
     client_secret, scope, base_url
 )
 
 oauth = OAuth()
+log = logging.getLogger(__name__)
 
 spotify = oauth.remote_app(
     'spotify',
@@ -22,19 +24,24 @@ spotify = oauth.remote_app(
 
 
 def get_user_id():
+    log.info('Getting user id')
     user = spotify.get('me')
     return user.data['id']
 
 
 def get_user_playlists():
+    log.info('Getting user playlists')
     params = {'limit': 50}
     playlists = spotify.get('me/playlists', data=params)
+    if 'error' in playlists.data:
+        log.error(playlists.data)
     if(playlists.status == 401):
         abort(Response('Access token expired', 401))
     return playlists.data
 
 
 def get_playlist_tracks(playlist_id):
+    log.info('Getting playlist tracks')
     offset = 0
     num_tracks_remaining = None
     tracks = []
@@ -43,6 +50,8 @@ def get_playlist_tracks(playlist_id):
         params = {'offset': offset}
         curr_tracks = spotify.get(
             f'playlists/{playlist_id}/tracks', data=params)
+        if 'error' in curr_tracks.data:
+            log.error(curr_tracks.data)
         if not num_tracks_remaining:
             num_tracks_remaining = curr_tracks.data['total']
         tracks.extend(curr_tracks.data['items'])
@@ -56,20 +65,24 @@ def get_playlist_tracks(playlist_id):
 def get_artist_top_tracks(artist_id):
     tracks = spotify.get(
         f'artists/{artist_id}/top-tracks?country=IE')
+    if 'error' in tracks.data:
+        log.error(tracks.data)
     return tracks.data['tracks']
 
 
 def create_new_playlist(playlist_name, user_id, track_ids):
-    print("Creating new playlist")
+    log.info('Creating new playlist')
     url = f'users/{user_id}/playlists'
     body = json.dumps({'name': f'{playlist_name} - Shuffed'})
     new_playlist = spotify.post(
         url, data=body, content_type='application/json')
+    if 'error' in new_playlist.data:
+        log.error(new_playlist.data)
     return new_playlist.data
 
 
 def add_tracks_to_playlist(playlist_id, tracks):
-    print("Adding new tracks to playlist")
+    log.info("Adding new tracks to playlist")
     url = f'playlists/{playlist_id}/tracks'
     n = 100
     tracks_split = [tracks[i:i+n] for i in range(0, len(tracks), n)]
@@ -78,6 +91,8 @@ def add_tracks_to_playlist(playlist_id, tracks):
         body = json.dumps({'uris': tracks_chunk})
         snapshot = spotify.post(
             url, data=body, content_type='application/json')
+        if 'error' in snapshot.data:
+            log.error(snapshot.data)
     return snapshot.data
 
 

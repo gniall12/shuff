@@ -3,10 +3,13 @@ from flask_cors import CORS
 from config import secret_key, frontend_url
 from shuffler import shuffle
 from spotify_oauth import oauth, spotify, get_user_playlists
+import logging
+import os
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}}, supports_credentials=True)
 app.config['SECRET_KEY'] = secret_key
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 @app.route('/login')
