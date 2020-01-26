@@ -1,12 +1,14 @@
 import json
 from flask import session, abort, Response
 from flask_oauthlib.client import OAuth, OAuthResponse
+import logging
 from config import (
     auth_base_url, token_base_url, client_id,
     client_secret, scope, base_url
 )
 
 oauth = OAuth()
+log = logging.getLogger(__name__)
 
 spotify = oauth.remote_app(
     'spotify',
@@ -27,6 +29,7 @@ def get_user_id():
 
 
 def get_user_playlists():
+    log.info('Getting user playlists')
     params = {'limit': 50}
     playlists = spotify.get('me/playlists', data=params)
     if(playlists.status == 401):
@@ -35,6 +38,7 @@ def get_user_playlists():
 
 
 def get_playlist_tracks(playlist_id):
+    log.info('Getting playlist tracks')
     offset = 0
     num_tracks_remaining = None
     tracks = []
@@ -54,13 +58,14 @@ def get_playlist_tracks(playlist_id):
 
 
 def get_artist_top_tracks(artist_id):
+    log.info('Getting artist top tracks')
     tracks = spotify.get(
         f'artists/{artist_id}/top-tracks?country=IE')
     return tracks.data['tracks']
 
 
 def create_new_playlist(playlist_name, user_id, track_ids):
-    print("Creating new playlist")
+    log.info('Creating new playlist')
     url = f'users/{user_id}/playlists'
     body = json.dumps({'name': f'{playlist_name} - Shuffed'})
     new_playlist = spotify.post(
@@ -69,7 +74,7 @@ def create_new_playlist(playlist_name, user_id, track_ids):
 
 
 def add_tracks_to_playlist(playlist_id, tracks):
-    print("Adding new tracks to playlist")
+    log.info("Adding new tracks to playlist")
     url = f'playlists/{playlist_id}/tracks'
     n = 100
     tracks_split = [tracks[i:i+n] for i in range(0, len(tracks), n)]
