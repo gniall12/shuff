@@ -4,9 +4,13 @@ from spotify_oauth import (
     get_user_id, get_playlist_tracks, get_artist_top_tracks,
     create_new_playlist, add_tracks_to_playlist
 )
+import logging
+
+log = logging.getLogger(__name__)
 
 
 def shuffle(playlist):
+    log.info('Shuffling playlist')
     playlist_id = playlist['id']
     playlist_name = playlist['name']
     user_id = get_user_id()
@@ -21,7 +25,7 @@ def shuffle(playlist):
 
 
 def get_old_artists_ids(tracks):
-    print('Getting old artist ids...')
+    log.info('Getting old artist ids')
     artist_ids = [track['artists'][0]['id'] for track in tracks]
     # Some artists have no ID - remove Nones from list
     artist_ids_nones_removed = list(filter(None, artist_ids))
@@ -29,7 +33,7 @@ def get_old_artists_ids(tracks):
 
 
 def get_new_track_ids(old_artist_ids, old_tracks):
-    print('Getting new track ids...')
+    log.info('Getting new track ids')
     new_tracks = []
     artist_count_dict = Counter(old_artist_ids)
     for artist_id in artist_count_dict:

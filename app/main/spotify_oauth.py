@@ -24,6 +24,7 @@ spotify = oauth.remote_app(
 
 
 def get_user_id():
+    log.info('Getting user id')
     user = spotify.get('me')
     return user.data['id']
 
@@ -58,7 +59,6 @@ def get_playlist_tracks(playlist_id):
 
 
 def get_artist_top_tracks(artist_id):
-    log.info('Getting artist top tracks')
     tracks = spotify.get(
         f'artists/{artist_id}/top-tracks?country=IE')
     return tracks.data['tracks']
