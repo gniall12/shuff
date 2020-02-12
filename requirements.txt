@@ -3,3 +3,5 @@ Flask-Cors==3.0.8
 requests==2.22.0
 python-dotenv
 flask-oauthlib
+pytest
+coverage
