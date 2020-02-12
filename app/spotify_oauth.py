@@ -1,9 +1,11 @@
 import json
-from flask import session, abort, Response
-from flask_oauthlib.client import OAuth, OAuthResponse
 import time
 import logging
-from config import (
+
+from flask import session, abort, Response
+from flask_oauthlib.client import OAuth, OAuthResponse
+
+from .config import (
     auth_base_url, token_base_url, client_id,
     client_secret, scope, base_url
 )

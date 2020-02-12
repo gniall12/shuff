@@ -1,10 +1,11 @@
 from collections import Counter
 import random
-from spotify_oauth import (
+import logging
+
+from .spotify_oauth import (
     get_user_id, get_playlist_tracks, get_artist_top_tracks,
     create_new_playlist, add_tracks_to_playlist
 )
-import logging
 
 log = logging.getLogger(__name__)
 
