@@ -2,6 +2,8 @@ from unittest.mock import patch
 
 from app import shuffler
 
+playlist = {"id": 1, "name": "choones"}
+
 tracks = [
     {
         "id": "1",
@@ -34,6 +36,29 @@ test_track = {
     "uri": "5",
 }
 
+new_playlist = {"id": 2}
+
+
+@patch("app.shuffler.get_user_id", return_value="1")
+@patch("app.shuffler.get_playlist_tracks", return_value=tracks)
+@patch("app.shuffler.get_artist_top_tracks", return_value=[test_track])
+@patch("app.shuffler.create_new_playlist", return_value=new_playlist)
+@patch("app.shuffler.add_tracks_to_playlist")
+def test_shuffle(
+    get_user_id_patch,
+    get_playlist_tracks_patch,
+    get_artist_top_tracks_patch,
+    create_new_playlist_patch,
+    add_tracks_to_playlist_patch,
+):
+    playlist_shuffled = shuffler.shuffle(playlist)
+    assert get_user_id_patch.called
+    assert get_playlist_tracks_patch.called
+    assert get_artist_top_tracks_patch.called
+    assert create_new_playlist_patch.called
+    assert add_tracks_to_playlist_patch.called
+    assert new_playlist == playlist_shuffled
+
 
 def test_get_old_artists_ids():
     assert ["1", "2", "3"] == shuffler.get_old_artists_ids(tracks)
@@ -45,9 +70,8 @@ def test_get_old_artists_ids_with_nones():
     assert ["1", "2", "3"] == shuffler.get_old_artists_ids(new_tracks)
 
 
-@patch("app.shuffler.get_artist_top_tracks")
-def test_get_new_track_ids(test_patch):
-    test_patch.return_value = [test_track]
+@patch("app.shuffler.get_artist_top_tracks", return_value=[test_track])
+def test_get_new_track_ids(get_artist_top_tracks_patch):
     x = shuffler.get_new_track_ids([1], tracks)
     assert ["5"] == x
 
