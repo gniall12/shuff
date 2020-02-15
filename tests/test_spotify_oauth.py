@@ -73,6 +73,26 @@ def test_get_spotify_oauth_token():
     assert "123" == token
 
 
+@patch("app.spotify_oauth.spotify.post")
+def test_create_new_playlist(spotify_post_patch):
+    data = {"items": [{"name": "p1", "id": 1}]}
+    spotify_post_patch.return_value = DummyResponse(data)
+    new_playlist = spotify_oauth.create_new_playlist("Tune", "1", [])
+    assert data == new_playlist
+
+
+@patch("app.spotify_oauth.log.error")
+@patch("app.spotify_oauth.abort", side_effect=Exception("Aborted"))
+@patch("app.spotify_oauth.spotify.post")
+def test_create_new_playlist_error(spotify_post_patch, abort_patch, log_patch):
+    data = {"error": "error message"}
+    spotify_post_patch.return_value = DummyResponse(data, 400)
+    with raises(Exception):
+        new_playlist = spotify_oauth.create_new_playlist("Tune", "1", [])
+    assert abort_patch.called
+    assert log_patch.called
+
+
 @patch("app.spotify_oauth.session", {})
 @patch("app.spotify_oauth.abort", side_effect=Exception("Aborted"))
 def test_get_spotify_oauth_token(abort_patch):

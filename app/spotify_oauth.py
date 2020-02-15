@@ -86,6 +86,7 @@ def create_new_playlist(playlist_name, user_id, track_ids):
         url, data=body, content_type='application/json')
     if 'error' in new_playlist.data:
         log.error(new_playlist.data)
+        abort(Response('Error creating playlist', 500))
     return new_playlist.data
 
 
