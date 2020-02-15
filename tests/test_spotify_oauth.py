@@ -65,3 +65,17 @@ def test_get_playlist_tracks_error(spotify_get_patch, abort_patch, log_patch):
         playlist_tracks = spotify_oauth.get_playlist_tracks(1)
     assert log_patch.called
     assert abort_patch.called
+
+
+@patch("app.spotify_oauth.session", {"access_token": "123"})
+def test_get_spotify_oauth_token():
+    token = spotify_oauth.get_spotify_oauth_token()
+    assert "123" == token
+
+
+@patch("app.spotify_oauth.session", {})
+@patch("app.spotify_oauth.abort", side_effect=Exception("Aborted"))
+def test_get_spotify_oauth_token(abort_patch):
+    with raises(Exception):
+        token = spotify_oauth.get_spotify_oauth_token()
+    assert abort_patch.called
