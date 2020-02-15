@@ -52,6 +52,7 @@ def get_playlist_tracks(playlist_id):
         tracks = spotify.get(url)
         if 'error' in tracks.data:
             log.error(tracks.data)
+            abort(Response('Could not retrieve playlist tracks', 500))
         playlist_tracks.extend(tracks.data['items'])
         url = None
         if 'next' in tracks.data and tracks.data['next']:

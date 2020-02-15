@@ -1,8 +1,13 @@
+import sys
+from http.client import HTTPResponse
 from unittest.mock import patch
+
 from flask_oauthlib.client import OAuthResponse
 from flask import Response
-from http.client import HTTPResponse
+from pytest import raises
+
 from app import spotify_oauth
+from app.config import base_url
 
 
 class DummyResponse(dict):
@@ -38,3 +43,25 @@ def test_get_user_playlists_error(spotify_get_patch, abort_patch, log_patch):
     user_playlists = spotify_oauth.get_user_playlists()
     assert abort_patch.called
     assert log_patch.called
+
+
+@patch("app.spotify_oauth.spotify.get")
+def test_get_playlist_tracks(spotify_get_patch):
+    track = {"name": "song1", "id": "1"}
+    data1 = {"items": [{"track": track}], "next": base_url + "next"}
+    data2 = {"items": [{"track": track}]}
+    spotify_get_patch.side_effect = [DummyResponse(data1), DummyResponse(data2)]
+    playlist_tracks = spotify_oauth.get_playlist_tracks(1)
+    assert [track, track] == playlist_tracks
+
+
+@patch("app.spotify_oauth.log.error")
+@patch("app.spotify_oauth.abort", side_effect=Exception("Aborted"))
+@patch("app.spotify_oauth.spotify.get")
+def test_get_playlist_tracks_error(spotify_get_patch, abort_patch, log_patch):
+    data = {"error": "error message"}
+    spotify_get_patch.return_value = DummyResponse(data)
+    with raises(Exception):
+        playlist_tracks = spotify_oauth.get_playlist_tracks(1)
+    assert log_patch.called
+    assert abort_patch.called
