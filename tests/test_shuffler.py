@@ -38,12 +38,11 @@ test_track = {
 
 new_playlist = {"id": 2}
 
-
-@patch("app.shuffler.get_user_id", return_value="1")
-@patch("app.shuffler.get_playlist_tracks", return_value=tracks)
-@patch("app.shuffler.get_artist_top_tracks", return_value=[test_track])
-@patch("app.shuffler.create_new_playlist", return_value=new_playlist)
 @patch("app.shuffler.add_tracks_to_playlist")
+@patch("app.shuffler.create_new_playlist", return_value=new_playlist)
+@patch("app.shuffler.get_artist_top_tracks", return_value=[test_track])
+@patch("app.shuffler.get_playlist_tracks", return_value=tracks)
+@patch("app.shuffler.get_user_id", return_value="1")
 def test_shuffle(
     get_user_id_patch,
     get_playlist_tracks_patch,
