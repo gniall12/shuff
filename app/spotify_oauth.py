@@ -3,7 +3,7 @@ import time
 import logging
 
 from flask import session, abort, Response
-from flask_oauthlib.client import OAuth, OAuthResponse
+from flask_oauthlib.client import OAuth
 
 from .config import (
     auth_base_url, token_base_url, client_id,
