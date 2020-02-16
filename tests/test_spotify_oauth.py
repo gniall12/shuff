@@ -1,8 +1,6 @@
-import sys
-from http.client import HTTPResponse
+from flask_oauthlib.client import OAuthResponse
 from unittest.mock import patch
 
-from flask_oauthlib.client import OAuthResponse
 from flask import Response
 from pytest import raises
 
