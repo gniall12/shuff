@@ -93,6 +93,25 @@ def test_create_new_playlist_error(spotify_post_patch, abort_patch, log_patch):
     assert log_patch.called
 
 
+
+@patch("app.spotify_oauth.spotify.post")
+def test_add_tracks_to_playlist(spotify_post_patch):
+    data = {"snapshot_id": "123"}
+    spotify_post_patch.return_value = DummyResponse(data)
+    snapshot = spotify_oauth.add_tracks_to_playlist("123", [{"name": "s1", "id": 1}])
+    assert data == snapshot
+
+
+@patch("app.spotify_oauth.log.error")
+@patch("app.spotify_oauth.spotify.post")
+def test_add_tracks_to_playlist_error(spotify_post_patch, log_patch):
+    data = {"error": "error_message"}
+    spotify_post_patch.return_value = DummyResponse(data)
+    snapshot = spotify_oauth.add_tracks_to_playlist("123", [{"name": "s1", "id": 1}])
+    assert log_patch.called
+    assert data == snapshot
+
+
 @patch("app.spotify_oauth.session", {})
 @patch("app.spotify_oauth.abort", side_effect=Exception("Aborted"))
 def test_get_spotify_oauth_token(abort_patch):
