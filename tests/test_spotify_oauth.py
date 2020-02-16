@@ -67,12 +67,6 @@ def test_get_playlist_tracks_error(spotify_get_patch, abort_patch, log_patch):
     assert abort_patch.called
 
 
-@patch("app.spotify_oauth.session", {"access_token": "123"})
-def test_get_spotify_oauth_token():
-    token = spotify_oauth.get_spotify_oauth_token()
-    assert "123" == token
-
-
 @patch("app.spotify_oauth.spotify.post")
 def test_create_new_playlist(spotify_post_patch):
     data = {"items": [{"name": "p1", "id": 1}]}
@@ -93,7 +87,6 @@ def test_create_new_playlist_error(spotify_post_patch, abort_patch, log_patch):
     assert log_patch.called
 
 
-
 @patch("app.spotify_oauth.spotify.post")
 def test_add_tracks_to_playlist(spotify_post_patch):
     data = {"snapshot_id": "123"}
@@ -110,6 +103,12 @@ def test_add_tracks_to_playlist_error(spotify_post_patch, log_patch):
     snapshot = spotify_oauth.add_tracks_to_playlist("123", [{"name": "s1", "id": 1}])
     assert log_patch.called
     assert data == snapshot
+
+
+@patch("app.spotify_oauth.session", {"access_token": "123"})
+def test_get_spotify_oauth_token():
+    token = spotify_oauth.get_spotify_oauth_token()
+    assert "123" == token
 
 
 @patch("app.spotify_oauth.session", {})
