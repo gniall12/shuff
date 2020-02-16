@@ -67,6 +67,51 @@ def test_get_playlist_tracks_error(spotify_get_patch, abort_patch, log_patch):
     assert abort_patch.called
 
 
+@patch("app.spotify_oauth.spotify.get")
+def test_get_artist_top_tracks(spotify_get_patch):
+    tracks = [{"name": "s1"}, {"name": "s2"}]
+    data = {"tracks": tracks}
+    spotify_get_patch.return_value = DummyResponse(data)
+    top_tracks = spotify_oauth.get_artist_top_tracks("1")
+    assert tracks == top_tracks
+
+
+@patch("app.spotify_oauth.log.error")
+@patch("app.spotify_oauth.spotify.get")
+def test_get_artist_top_tracks_no_tracks_found(spotify_get_patch, log_patch):
+    spotify_get_patch.return_value = DummyResponse({})
+    top_tracks = spotify_oauth.get_artist_top_tracks("1")
+    assert [] == top_tracks
+    assert log_patch.called
+
+
+@patch("app.spotify_oauth.log.info")
+@patch("app.spotify_oauth.spotify.get")
+def test_get_artist_top_tracks_error_rate_once(spotify_get_patch, log_patch):
+    data1 = {"error": "error_message"}
+    tracks = [{"name": "s1"}, {"name": "s2"}]
+    data2 = {"tracks": tracks}
+    spotify_get_patch.side_effect = [DummyResponse(data1, 429), DummyResponse(data2)]
+    top_tracks = spotify_oauth.get_artist_top_tracks("1")
+    assert tracks == top_tracks
+    assert log_patch.called
+
+
+@patch("app.spotify_oauth.log.info")
+@patch("app.spotify_oauth.log.error")
+@patch("app.spotify_oauth.time.sleep")
+@patch("app.spotify_oauth.spotify.get")
+def test_get_artist_top_tracks_error_rate_four(
+    spotify_get_patch, sleep_patch, error_patch, info_patch
+):
+    data = {"error": "error_message"}
+    spotify_get_patch.return_value = DummyResponse(data, 429)
+    top_tracks = spotify_oauth.get_artist_top_tracks("1")
+    assert [] == top_tracks
+    assert error_patch.called
+    assert info_patch.called
+
+
 @patch("app.spotify_oauth.spotify.post")
 def test_create_new_playlist(spotify_post_patch):
     data = {"items": [{"name": "p1", "id": 1}]}
