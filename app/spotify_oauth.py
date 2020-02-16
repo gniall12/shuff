@@ -1,9 +1,11 @@
 import json
-from flask import session, abort, Response
-from flask_oauthlib.client import OAuth, OAuthResponse
 import time
 import logging
-from config import (
+
+from flask import session, abort, Response
+from flask_oauthlib.client import OAuth
+
+from .config import (
     auth_base_url, token_base_url, client_id,
     client_secret, scope, base_url
 )
@@ -50,6 +52,7 @@ def get_playlist_tracks(playlist_id):
         tracks = spotify.get(url)
         if 'error' in tracks.data:
             log.error(tracks.data)
+            abort(Response('Could not retrieve playlist tracks', 500))
         playlist_tracks.extend(tracks.data['items'])
         url = None
         if 'next' in tracks.data and tracks.data['next']:
@@ -83,6 +86,7 @@ def create_new_playlist(playlist_name, user_id, track_ids):
         url, data=body, content_type='application/json')
     if 'error' in new_playlist.data:
         log.error(new_playlist.data)
+        abort(Response('Error creating playlist', 500))
     return new_playlist.data
 
 

@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 auth_base_url = 'https://accounts.spotify.com/authorize'

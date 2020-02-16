@@ -1,10 +1,12 @@
+import os
+import logging
+
 from flask import Flask, redirect, url_for, request, session, abort, Response
 from flask_cors import CORS
-from config import secret_key, frontend_url
-from shuffler import shuffle
-from spotify_oauth import oauth, spotify, get_user_playlists
-import logging
-import os
+
+from .config import secret_key, frontend_url
+from .shuffler import shuffle
+from .spotify_oauth import oauth, spotify, get_user_playlists
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}}, supports_credentials=True)
@@ -45,8 +47,3 @@ def shuffle_playlist():
 def logout():
     session.pop('access_token', None)
     return {'status': 'Logged out'}
-
-
-if __name__ == '__main__':
-    oauth.init_app(app)
-    app.run(host='0.0.0.0', debug=True)
