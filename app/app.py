@@ -1,7 +1,7 @@
 import os
 import logging
 
-from flask import Flask, redirect, url_for, request, session, abort, Response
+from flask import Flask, redirect, url_for, request, session, abort, Response, render_template
 from flask_cors import CORS
 
 from .config import secret_key, frontend_url
@@ -14,7 +14,19 @@ app.config['SECRET_KEY'] = secret_key
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
+@app.route('/', methods=['GET'])
+def home():
+    if('access_token' not in session):
+        return(redirect(url_for('login')))
+    return render_template('home.html')
+
+
 @app.route('/login', methods=['GET'])
+def login():
+    return render_template('login.html')
+
+
+@app.route('/login-redirect', methods=['GET'])
 def login_redirect():
     return spotify.authorize(callback=url_for('handle_token', _external=True))
 
@@ -24,9 +36,9 @@ def handle_token():
     resp = spotify.authorized_response()
     if resp is None or resp.get('access_token') is None:
         session.pop('access_token', None)
-        return redirect(frontend_url)
+        return redirect(url_for('home'))
     session['access_token'] = (resp['access_token'], '')
-    return redirect(frontend_url)
+    return redirect(url_for('home'))
 
 
 @app.route('/playlists', methods=['GET'])
