@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shuff - Home</title>
+    <script src="{{ url_for('static', filename='jquery-3.4.1.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='shuffle.js')}}"></script>
 </head>
 
 <body>
     <h3>Playlists</h3>
     {% for playlist in playlists['items']|sort(attribute='name') %}
-    <p>{{ playlist['name'] }}</p>
+        <button onclick="shuffle('{{ playlist.id }}', '{{ playlist.name }}')">{{ playlist['name'] }}</button>
     {% endfor %}
 </body>
 

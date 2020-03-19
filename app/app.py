@@ -45,12 +45,14 @@ def handle_token():
     return redirect(url_for('home'))
 
 
-@app.route('/shuffle', methods=['POST'])
+@app.route('/shuffle', methods=['GET'])
 def shuffle_playlist():
-    if('playlist' not in request.json):
-        abort(Response('Request missing playlist id', 400))
-    playlist = request.json['playlist']
-    new_playlist = shuffle(playlist)
+    if('id' not in request.args or 'name' not in request.args):
+        abort(400)
+    print(request.args)
+    playlist_id = request.args['id']
+    playlist_name = request.args['name']
+    new_playlist = shuffle(playlist_id, playlist_name)
     return new_playlist
 
 
