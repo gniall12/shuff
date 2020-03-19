@@ -14,6 +14,8 @@
     {% for playlist in playlists['items']|sort(attribute='name') %}
         <button onclick="shuffle('{{ playlist.id }}', '{{ playlist.name }}')">{{ playlist['name'] }}</button>
     {% endfor %}
+    <br>
+    <a href="/logout">Logout</a>
 </body>
 
 </html>

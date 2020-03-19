@@ -59,4 +59,4 @@ def shuffle_playlist():
 @app.route('/logout', methods=['GET'])
 def logout():
     session.pop('access_token', None)
-    return {'status': 'Logged out'}
+    return redirect(url_for('login'))
