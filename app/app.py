@@ -18,7 +18,11 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 def home():
     if('access_token' not in session):
         return(redirect(url_for('login')))
-    return render_template('home.html')
+    try:
+        playlists = get_user_playlists()
+    except:
+        return redirect(url_for('login'))
+    return render_template('home.html', playlists=playlists)
 
 
 @app.route('/login', methods=['GET'])
@@ -39,11 +43,6 @@ def handle_token():
         return redirect(url_for('home'))
     session['access_token'] = (resp['access_token'], '')
     return redirect(url_for('home'))
-
-
-@app.route('/playlists', methods=['GET'])
-def playlists():
-    return get_user_playlists()
 
 
 @app.route('/shuffle', methods=['POST'])
