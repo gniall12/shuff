@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Error{% endblock %}
 {% block content %}
-    <h4>Oops, an error occurred</h4>
-    <p>{{ error_message }}</p>
-    <a href="/">Home</a>
+    <div style="text-align: center;">
+        <h4>Oops, an error occurred</h4>
+        <p>{{ error_message }}</p>
+        <a href="/">Home</a>
+    </div>
 {% endblock %}
