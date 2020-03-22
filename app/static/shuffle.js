@@ -6,4 +6,7 @@ function shuffle(id, name) {
         console.log(data);
         console.log(status);
     }, "json")
+    .fail(function(data){
+        window.location.replace('/error?code=' + data.status + '&message=' + data.responseText);
+    });
 }

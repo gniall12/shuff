@@ -2,7 +2,7 @@ import json
 import time
 import logging
 
-from flask import session, abort, Response
+from flask import session, abort
 from flask_oauthlib.client import OAuth
 
 from .config import (
@@ -39,7 +39,7 @@ def get_user_playlists():
     if 'error' in playlists.data:
         log.error(playlists.data)
     if(playlists.status == 401):
-        abort(Response('Access token expired', 401))
+        abort(401, 'Access token expired')
     return playlists.data
 
 
@@ -52,7 +52,7 @@ def get_playlist_tracks(playlist_id):
         tracks = spotify.get(url)
         if 'error' in tracks.data:
             log.error(tracks.data)
-            abort(Response('Could not retrieve playlist tracks', 500))
+            abort(500, 'Could not retrieve playlist tracks')
         playlist_tracks.extend(tracks.data['items'])
         url = None
         if 'next' in tracks.data and tracks.data['next']:
@@ -86,7 +86,7 @@ def create_new_playlist(playlist_name, user_id, track_ids):
         url, data=body, content_type='application/json')
     if 'error' in new_playlist.data:
         log.error(new_playlist.data)
-        abort(Response('Error creating playlist', 500))
+        abort(500, 'Error creating playlist')
     return new_playlist.data
 
 
@@ -110,4 +110,4 @@ def get_spotify_oauth_token():
     try:
         return session['access_token']
     except KeyError:
-        abort(Response('No access token', 400))
+        abort(400, 'No access token')

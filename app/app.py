@@ -1,11 +1,11 @@
 import os
 import logging
 
-from flask import Flask, redirect, url_for, request, session, abort, Response, render_template
+from flask import Flask, redirect, url_for, request, session, abort, render_template, make_response
 
 from .config import secret_key, frontend_url
 from .shuffler import shuffle
-from .spotify_oauth import oauth, spotify, get_user_playlists
+from .spotify_oauth import spotify, get_user_playlists
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secret_key
@@ -47,7 +47,6 @@ def handle_token():
 def shuffle_playlist():
     if('id' not in request.args or 'name' not in request.args):
         abort(400)
-    print(request.args)
     playlist_id = request.args['id']
     playlist_name = request.args['name']
     new_playlist = shuffle(playlist_id, playlist_name)
@@ -58,3 +57,36 @@ def shuffle_playlist():
 def logout():
     session.pop('access_token', None)
     return redirect(url_for('login'))
+
+
+@app.route('/error', methods=['GET'])
+def reroute_error():
+    code = int(request.args['code'])
+    message = request.args['message']
+    return render_template('error.html', error_message=message), code
+
+
+@app.errorhandler(400)
+def bad_request(error):
+    if(str(request.url_rule).strip() == str(url_for('shuffle_playlist')).strip()):
+        return make_response(str(error), 400)
+    return render_template('error.html', error_message=error), 400
+
+
+@app.errorhandler(401)
+def unauthorised(error):
+    if(str(request.url_rule).strip() == str(url_for('shuffle_playlist')).strip()):
+        return make_response(str(error), 401)
+    return render_template('error.html', error_message=error), 401
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error.html', error_message='This page does not exist'), 404
+
+
+@app.errorhandler(500)
+def server_error(error):
+    if(str(request.url_rule).strip() == str(url_for('shuffle_playlist')).strip()):
+        return make_response(str(error), 500)
+    return render_template('error.html', error_message=error), 500

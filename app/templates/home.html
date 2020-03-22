@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shuff - Home</title>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+    {{ super() }}
     <script src="{{ url_for('static', filename='jquery-3.4.1.min.js')}}"></script>
     <script src="{{ url_for('static', filename='shuffle.js')}}"></script>
-</head>
-
-<body>
+{% endblock %}
+{% block content %}
     <h3>Playlists</h3>
-    {% for playlist in playlists['items']|sort(attribute='name') %}
-        <button onclick="shuffle('{{ playlist.id }}', '{{ playlist.name }}')">{{ playlist['name'] }}</button>
-    {% endfor %}
+        {% for playlist in playlists['items']|sort(attribute='name') %}
+            <button onclick="shuffle('{{ playlist.id }}', '{{ playlist.name }}')">{{ playlist['name'] }}</button>
+        {% endfor %}
     <br>
     <a href="/logout">Logout</a>
-</body>
-
-</html>
+{% endblock %}
