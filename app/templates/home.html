@@ -14,7 +14,7 @@
     <div class="row"  style="margin: 10px 50px 30px 50px;">
         {% for playlist in playlists['items']|sort(attribute='name') %}
         <div class="col-md-4">
-            <button class="button playlist" 
+            <button class="button playlist" id="{{ playlist.id }}"
                 onclick="shuffle('{{ playlist.id }}', '{{ playlist.name }}')">{{ playlist['name'] }}</button>
         </div>
         {% endfor %}
