@@ -4,3 +4,4 @@ python-dotenv
 flask-oauthlib
 pytest
 coverage
+Werkzeug==0.16.1
