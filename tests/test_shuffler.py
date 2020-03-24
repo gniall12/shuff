@@ -50,7 +50,7 @@ def test_shuffle(
     create_new_playlist_patch,
     add_tracks_to_playlist_patch,
 ):
-    playlist_shuffled = shuffler.shuffle(playlist)
+    playlist_shuffled = shuffler.shuffle(playlist['id'], playlist['name'])
     assert get_user_id_patch.called
     assert get_playlist_tracks_patch.called
     assert get_artist_top_tracks_patch.called
