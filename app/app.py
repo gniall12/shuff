@@ -5,9 +5,10 @@ from flask import Flask, redirect, url_for, request, session, abort, render_temp
 
 from .config import secret_key, frontend_url
 from .shuffler import shuffle
-from .spotify_oauth import spotify, get_user_playlists
+from .spotify_oauth import oauth, get_user_playlists
 
 app = Flask(__name__)
+oauth.init_app(app)
 app.config['SECRET_KEY'] = secret_key
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
@@ -30,16 +31,16 @@ def login():
 
 @app.route('/login-redirect', methods=['GET'])
 def login_redirect():
-    return spotify.authorize(callback=url_for('handle_token', _external=True))
+    return oauth.spotify.authorize_redirect(url_for('handle_token', _external=True))
 
 
 @app.route('/callback', methods=['GET'])
 def handle_token():
-    resp = spotify.authorized_response()
-    if resp is None or resp.get('access_token') is None:
+    token = oauth.spotify.authorize_access_token()
+    if token is None:
         session.pop('access_token', None)
         return redirect(url_for('home'))
-    session['access_token'] = (resp['access_token'], '')
+    session['access_token'] = token
     return redirect(url_for('home'))
 
 
