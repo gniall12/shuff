@@ -4,3 +4,4 @@ python-dotenv
 Authlib
 pytest
 coverage
+gunicorn
