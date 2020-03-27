@@ -87,6 +87,8 @@ def get_artist_top_tracks(artist_id, attempt_count=0):
 
 def create_new_playlist(playlist_name, user_id, track_ids):
     log.info('Creating new playlist')
+    if(len(track_ids) == 0):
+        abort(500, 'Creating playlist with no tracks')
     url = f'users/{user_id}/playlists'
     body = {'name': f'{playlist_name} - Shuffed'}
     new_playlist = oauth.spotify.post(
