@@ -22,8 +22,21 @@ Algorithm to shuffle playlist:
     
 ## Running Code
 
-1. Create python virtual environment (https://docs.python-guide.org/dev/virtualenvs/)
-2. Run `pip install -r requirements.txt` to install packages
-3. Run code using `python -m flask run`  
+1. Create python virtual environment python3 -m venv env
+2. Activate virtual environment source env/bin/activate
+3. Run `pip install -r requirements.txt` to install packages
+4. Create .env file with environment variables
+   export SPOTIFY_CLIENT_ID=<your-client-id>
+   export SPOTIFY_CLIENT_SECRET=<your-client-secret>
+   export SPOTIFY_REDIRECT_URI=http://localhost:5000/callback/
+   export SHUFF_SECRET_KEY=<your-secret-key>
+   export FLASK_APP=app/app
+5. Run code using `flask run`  
+   
+## Testing
+Follow steps 1-4 above 
+5. `pip install -e .`
+6. `pytest`
+7. To run coverage - `coverage run -m pytest`
 
 Pull requests and suggestions for features are welcome

@@ -10,16 +10,13 @@ from .spotify_oauth import (
 log = logging.getLogger(__name__)
 
 
-def shuffle(playlist):
+def shuffle(playlist_id, playlist_name):
     log.info('Shuffling playlist')
-    playlist_id = playlist['id']
-    playlist_name = playlist['name']
     user_id = get_user_id()
     old_tracks = get_playlist_tracks(playlist_id)
     old_artist_ids = get_old_artists_ids(old_tracks)
     new_track_ids = get_new_track_ids(old_artist_ids, old_tracks)
-    new_playlist = create_new_playlist(
-        playlist_name, user_id, new_track_ids)
+    new_playlist = create_new_playlist(playlist_name, user_id)
     new_playlist_id = new_playlist['id']
     add_tracks_to_playlist(new_playlist_id, new_track_ids)
     return new_playlist

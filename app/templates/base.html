@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shuff - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Syncopate:700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    {% endblock %}
+</head>
+
+<body>
+    <div class="row" style="margin: 50px 50px 30px 50px;">
+        <h1 class="col-md-12 title"><a href="/" class="title-link">Shuff</a></h1>
+        <div class="col-md-12" style="text-align: center;">
+            <p>
+                Refresh your playlists - same artists, different songs
+            </p>
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+</body>
+
+</html>

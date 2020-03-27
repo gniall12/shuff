@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='jquery-3.4.1.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='shuffle.js')}}"></script>
+{% endblock %}
+{% block content %}
+    <div class="row" style="text-align: center; margin-bottom: 15px;">
+        <h4 class="col-md-12">Playlists</h4>
+        <p class="col-md-12" style="margin-bottom: 0px;">Select a playlist to shuff</p>
+    </div>    
+
+    <div class="row"  style="margin: 10px 50px 30px 50px;">
+        {% for playlist in playlists['items']|sort(attribute='name') %}
+        <div class="col-md-4" id="{{ playlist.id }}div">
+            <button class="button shuff-btn playlist" id="{{ playlist.id }}"
+                onclick="shuffle('{{ playlist.id }}', '{{ playlist.name }}')">{{ playlist['name'] }}</button>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="row" style="text-align: center; margin-top: 50px;">
+            <a href="/logout" class="col-md-12 logout">Logout</a>
+    </div>
+{% endblock %}
