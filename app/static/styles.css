@@ -1,7 +1,9 @@
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #F7F0F0;
-    color: #1A1423;
+    background-color: #000A16;
+    background: #000A16;
+    background: linear-gradient(90deg, #000A16 0%, #000E21 50%, #000A16 100%);
+    color: #E0DDCE;
 }
 
 
@@ -24,11 +26,20 @@ body {
 }
 
 .title {
-    color: #1A1423;
+    color: #FFF;
     text-align: center;
-    border-bottom: 2px solid #BA1200;
+    border-bottom: 3px solid #ff9505;
     font-size: 60px;
     font-family: 'Syncopate', sans-serif;
+}
+
+.title-link {
+    color: #FFF;
+}
+
+.title-link:hover {
+    color: #FFF;
+    text-decoration: none; 
 }
 
 @media (max-width: 500px) {
@@ -43,38 +54,39 @@ body {
     }
 }
 
+.logout {
+    color: #FFF;
+    margin-bottom: 25px;
+}
+
+.shuff-btn {
+    color: #000A16;
+    background-color: #E0DDCE;
+    border-style: none solid;
+    border-width: 0px 3px;
+    border-color: transparent #ff9505;
+    box-shadow: 0px 7px 5px 0px rgba(0,0,0,0.75);
+    font-weight: bold;
+}
+
+.shuff-btn:hover {
+    background-color: #FFF;
+    color: #000A16;
+}
+
 .playlist {
     width: 100%;
     margin: 10px 0px;
     padding: 5px;
-    color: #F7F0F0;
-    background-color: #23395B;
     border-radius: 10px;
     cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border: none;
-}
-
-.playlist:hover {
-    background-color: #2e4c79;
-}
-
-.logout {
-    color: #23395B;
-    margin-bottom: 25px;
 }
 
 .login {
-    color: #F7F0F0;
-    background-color: #23395B;
     border-radius: 25px; 
-    border-color: transparent;
     width: 200px;
-}
-
-.login:hover  {
-    background-color: #2e4c79;
-    color: #F7F0F0;
+    border-color: transparent;
 }
