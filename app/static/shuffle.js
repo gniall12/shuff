@@ -13,7 +13,7 @@ function shuffle(id, name) {
         newPlaylistDiv.setAttribute("id", data["id"] + "div");
 
         var newPlaylistButton = document.createElement("button");
-        newPlaylistButton.setAttribute("class", "button playlist");
+        newPlaylistButton.setAttribute("class", "button shuff-btn playlist");
         newPlaylistButton.setAttribute("id", data["id"]);
         newPlaylistButton.setAttribute("onclick", "shuffle('" + data["id"] + "', '" + data["name"] + "')");
         newPlaylistButton.innerText = data["name"];
