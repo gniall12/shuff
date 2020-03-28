@@ -8,15 +8,9 @@ from .shuffler import shuffle
 from .spotify_oauth import oauth, get_user_playlists
 
 
-def create_app():
-    app = Flask(__name__)
-    oauth.init_app(app)
-    app.config['SESSION_TYPE'] = 'memcached'
-    app.config['SECRET_KEY'] = 'secret_key'
-    return app
-
-
-app = create_app()
+app = Flask(__name__)
+oauth.init_app(app)
+app.config['SECRET_KEY'] = secret_key
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
