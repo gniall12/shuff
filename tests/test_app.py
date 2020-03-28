@@ -40,8 +40,8 @@ def test_home_playlists_exception(redirect_patch, url_for_patch, test_client):
 @patch('authlib.integrations.flask_client.FlaskRemoteApp')
 @patch("app.app.oauth.create_client")
 def test_login_redirect(create_client_patch, remote_app_patch, url_for_patch, test_client):
-    test_client.get("/login-redirect")
     create_client_patch.return_value = remote_app_patch
+    test_client.get("/login-redirect")
     assert remote_app_patch.authorize_redirect.called
 
 
@@ -50,12 +50,12 @@ def test_login_redirect(create_client_patch, remote_app_patch, url_for_patch, te
 @patch("app.app.oauth.create_client")
 def test_handle_token(create_client_patch, remote_app_patch, redirect_patch, test_client):
     with patch("app.app.session", dict()) as session:
-        resp = {"access_token": "123"}
+        resp = "123"
         create_client_patch.return_value = remote_app_patch
         remote_app_patch.authorize_access_token.return_value = resp
         response = test_client.get("/callback")
         assert redirect_patch.called
-        assert ("123", "") == session.get("access_token")
+        assert "123" == session.get("access_token")
 
 
 @patch("app.app.redirect")
