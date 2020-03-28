@@ -25,6 +25,10 @@ body {
     }
 }
 
+.title-container {
+    margin: 50px 50px 30px 50px;
+}
+
 .title {
     color: #FFF;
     text-align: center;
@@ -54,6 +58,16 @@ body {
     }
 }
 
+.playlist-copy-container {
+    text-align: center; 
+    margin-bottom: 15px;
+}
+
+.logout-container {
+    text-align: center; 
+    margin-top: 50px;
+}
+
 .logout {
     color: #FFF;
     margin-bottom: 25px;
@@ -72,6 +86,10 @@ body {
 .shuff-btn:hover {
     background-color: #FFF;
     color: #000A16;
+}
+
+.playlists-container {
+    margin: 10px 35px 30px 35px
 }
 
 .playlist {
