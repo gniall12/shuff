@@ -7,7 +7,6 @@ from .config import secret_key, frontend_url
 from .shuffler import shuffle
 from .spotify_oauth import oauth, get_user_playlists
 
-
 app = Flask(__name__)
 oauth.init_app(app)
 app.config['SECRET_KEY'] = secret_key
