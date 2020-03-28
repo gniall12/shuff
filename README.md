@@ -1,12 +1,14 @@
 # shuff
 
-Backend for [shuff.niallg.ie](https://shuff.niallg.ie) using the [Spotify API](https://developer.spotify.com/documentation/web-api/)
-
-## Project Background
+[shuff.niallg.ie](https://shuff.niallg.ie)
 
 Refresh your playlists with different songs by the same artists.
 
 Motivation: I was getting tired of my playlists, but Spotify's recommendations consistently included artists I didn't like.
+
+Previously built as a REST API serving JSON to an Angular front-end. Switched to full-stack Flask app for simpler maintenance and development, and to learn more about building full-stack flask apps.
+
+[Spotify API](https://developer.spotify.com/documentation/web-api/)
 
 ## Details
 
@@ -34,9 +36,12 @@ Algorithm to shuffle playlist:
 5. Run code using `flask run`  
    
 ## Testing
-Follow steps 1-4 above 
+Follow steps 1-4 above, and then
+
 5. `pip install -e .`
 6. `pytest`
-7. To run coverage - `coverage run -m pytest`
+7. Running coverage 
+   1. `coverage run -m pytest`
+   2. `coverage report`
 
 Pull requests and suggestions for features are welcome
