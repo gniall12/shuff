@@ -138,7 +138,7 @@ def test_create_new_playlist(create_client_patch, remote_app_patch):
     data = {"items": [{"name": "p1", "id": 1}]}
     create_client_patch.return_value = remote_app_patch
     remote_app_patch.post.return_value = DummyResponse(data)
-    new_playlist = spotify_oauth.create_new_playlist("Tune", "1", [])
+    new_playlist = spotify_oauth.create_new_playlist("Tune", "1")
     assert data == new_playlist
 
 
@@ -151,7 +151,7 @@ def test_create_new_playlist_error(create_client_patch, remote_app_patch, abort_
     create_client_patch.return_value = remote_app_patch
     remote_app_patch.post.return_value = DummyResponse(data, 400)
     with raises(Exception):
-        spotify_oauth.create_new_playlist("Tune", "1", [])
+        spotify_oauth.create_new_playlist("Tune", "1")
     assert abort_patch.called
     assert log_patch.called
 
