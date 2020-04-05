@@ -38,6 +38,7 @@ test_track = {
 
 new_playlist = {"id": 2}
 
+
 @patch("app.shuffler.add_tracks_to_playlist")
 @patch("app.shuffler.create_new_playlist", return_value=new_playlist)
 @patch("app.shuffler.get_artist_top_tracks", return_value=[test_track])
@@ -95,6 +96,26 @@ def test_track_exists_by_name():
     assert shuffler.track_exists(track, tracks)
 
 
+def test_track_exists_by_name_sub_1():
+    track = {
+        "id": "4",
+        "album": "Warpaint",
+        "artists": [{"name": "Warpaint", "id": "4"}],
+        "name": "Baby (remix)",
+    }
+    assert shuffler.track_exists(track, tracks)
+
+
+def test_track_exists_by_name_sub_2():
+    track = {
+        "id": "4",
+        "album": "Warpaint",
+        "artists": [{"name": "Warpaint", "id": "4"}],
+        "name": "Ba",
+    }
+    assert shuffler.track_exists(track, tracks)
+
+
 def test_track_doesnt_exist():
     track = {
         "id": "5",
@@ -103,4 +124,3 @@ def test_track_doesnt_exist():
         "name": "Oasis",
     }
     assert not shuffler.track_exists(track, tracks)
-
