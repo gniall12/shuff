@@ -50,6 +50,14 @@ def get_new_track_ids(old_artist_ids, old_tracks):
 
 def track_exists(track, existing_tracks):
     for existing_track in existing_tracks:
-        if track['id'] == existing_track['id'] or track['name'] == existing_track['name']:
+        if track['id'] == existing_track['id'] or substring_exists(track['name'], existing_track['name']):
             return True
     return False
+
+
+def substring_exists(track_1, track_2):
+    if len(track_1) > len(track_2):
+        return track_2 in track_1
+    elif len(track_2) > len(track_1):
+        return track_1 in track_2
+    return track_1 == track_2
