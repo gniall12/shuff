@@ -107,3 +107,17 @@ body {
     border-radius: 25px; 
     width: 200px;
 }
+
+.contact-link-container {
+    text-align: center; 
+    margin: 20px 0px;
+}
+
+.contact-link {
+    font-size: 0.8rem;
+    color: #e0ddceeb;
+}
+
+a:hover {
+    color: white;
+}
