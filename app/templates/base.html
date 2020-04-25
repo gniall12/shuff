@@ -6,6 +6,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shuff - {% block title %}{% endblock %}</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164474750-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-164474750-1');
+    </script>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='assets/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='assets/favicon-32x32.png') }}">
@@ -14,8 +25,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}">
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Syncopate:700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
-    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}"> {% endblock %}
 </head>
 
 <body>
@@ -27,8 +37,7 @@
             </p>
         </div>
     </div>
-    {% block content %}
-    {% endblock %}
+    {% block content %} {% endblock %}
     <div class="row contact-link-container">
         <div class="col-md-12">
             <a href="https://niallg.ie#contact" class="contact-link">Feedback/Contact</a>
