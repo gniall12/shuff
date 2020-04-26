@@ -1,9 +1,11 @@
 import os
 import logging
+from logging import handlers
+import traceback
 
 from flask import Flask, redirect, url_for, request, session, abort, render_template, make_response
 
-from .config import secret_key, frontend_url
+from .config import secret_key, mail_host, email_address, email_password
 from .shuffler import shuffle
 from .spotify_oauth import oauth, get_user_playlists
 
@@ -11,6 +13,19 @@ app = Flask(__name__)
 oauth.init_app(app)
 app.config['SECRET_KEY'] = secret_key
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
+smtp_handler = handlers.SMTPHandler(mailhost=(mail_host, 587),
+                                    fromaddr=email_address,
+                                    toaddrs=email_address,
+                                    subject=u"Shuff error",
+                                    credentials=(
+                                        email_address, email_password),
+                                    secure=())
+
+
+logger = logging.getLogger()
+smtp_handler.setLevel(logging.ERROR)
+logger.addHandler(smtp_handler)
 
 
 @app.route('/', methods=['GET'])
@@ -69,6 +84,7 @@ def reroute_error():
 
 @app.errorhandler(400)
 def bad_request(error):
+    logging.error(traceback.format_exc())
     if(str(request.url_rule).strip() == str(url_for('shuffle_playlist')).strip()):
         return make_response(str(error), 400)
     return render_template('error.html', error_message=error), 400
@@ -83,11 +99,13 @@ def unauthorised(error):
 
 @app.errorhandler(404)
 def page_not_found(error):
+    logging.error(traceback.format_exc())
     return render_template('error.html', error_message='This page does not exist'), 404
 
 
 @app.errorhandler(500)
 def server_error(error):
+    logging.error(traceback.format_exc())
     if(str(request.url_rule).strip() == str(url_for('shuffle_playlist')).strip()):
         return make_response(str(error), 500)
     return render_template('error.html', error_message=error), 500
