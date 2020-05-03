@@ -99,7 +99,6 @@ def unauthorised(error):
 
 @app.errorhandler(404)
 def page_not_found(error):
-    logging.error(traceback.format_exc())
     return render_template('error.html', error_message='This page does not exist'), 404
 
 
